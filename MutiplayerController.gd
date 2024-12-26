@@ -45,9 +45,9 @@ func connection_failed():
 @rpc("any_peer")
 func SendPlayerInformation(name, id):
 	if !GameManager.Players.has(id):
-		GameManager.Players[id] ={
-			"name" : name,
-			"id" : id,
+		GameManager.Players[id] = {
+			"name": name,
+			"id": id,
 			"score": 0
 		}
 	
@@ -55,12 +55,31 @@ func SendPlayerInformation(name, id):
 		for i in GameManager.Players:
 			SendPlayerInformation.rpc(GameManager.Players[i].name, i)
 
-@rpc("any_peer","call_local")
+@rpc("any_peer", "call_local")
 func StartGame():
-	var scene = load("res://testScene.tscn").instantiate()
-	get_tree().root.add_child(scene)
+	print("StartGame called on peer: ", multiplayer.get_unique_id())
+	# Make sure we're not already in the game scene
+	for child in get_tree().root.get_children():
+		if child.scene_file_path == "res://testScene3D.tscn":
+			print("Game scene already exists, skipping")
+			return
+	
+	print("Loading game scene")
+	# Load and setup the game scene
+	var scene = load("res://testScene3D.tscn").instantiate()
+	
+	# Add to root but make sure it's properly setup for networking
+	print("Adding scene to tree")
+	get_tree().root.add_child(scene, true)
+	
+	# Hide the menu
 	self.hide()
 	
+	# Make sure the scene is not paused
+	get_tree().paused = false
+	
+	print("Game scene setup complete")
+
 func hostGame():
 	peer = ENetMultiplayerPeer.new()
 	var error = peer.create_server(port, 2)
@@ -96,9 +115,9 @@ func _on_start_game_button_down():
 
 
 func _on_button_button_down():
-	GameManager.Players[GameManager.Players.size() + 1] ={
-			"name" : "test",
-			"id" : 1,
+	GameManager.Players[GameManager.Players.size() + 1] = {
+			"name": "test",
+			"id": 1,
 			"score": 0
 		}
 	pass # Replace with function body.

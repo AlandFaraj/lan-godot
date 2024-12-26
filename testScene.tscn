@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://bt13jko8i5tec"]
 
-[ext_resource type="Texture2D" uid="uid://bh4xilvgu3miq" path="res://icon.svg" id="1_0m6ke"]
+[ext_resource type="Texture2D" uid="uid://durtpmgnbsvn3" path="res://icon.svg" id="1_0m6ke"]
 [ext_resource type="Texture2D" uid="uid://chlnt56mtnfqo" path="res://parallax_background_layer_6.png" id="1_07yi8"]
 [ext_resource type="Script" path="res://SceneManager.gd" id="1_br64h"]
 [ext_resource type="PackedScene" uid="uid://cwld7ti0ms68j" path="res://player.tscn" id="2_7bveh"]

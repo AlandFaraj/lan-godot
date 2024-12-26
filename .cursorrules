@@ -1,0 +1,7 @@
+this project is a lan multiplayer game.
+it was a 2d template project.
+the target is a 3d game where players are cubes when joining the server
+they can move with wasd and rotate with mouse.
+they can shoot with spacebar.
+players will have health bars and when they are hit, they will lose health.
+when a player's health reaches 0, they will be respawned at the start position with full health.

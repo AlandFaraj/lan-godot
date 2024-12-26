@@ -1,0 +1,79 @@
+[gd_scene load_steps=8 format=3 uid="uid://bdes5a2gwy7ds"]
+
+[ext_resource type="Script" path="res://player3D.gd" id="1_kj2p4"]
+[ext_resource type="PackedScene" path="res://Bullet3D.tscn" id="2_r5m3p"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_q8p2x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6y5xv"]
+albedo_color = Color(0.2, 0.6, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w5dlc"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_j2p4x"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:sync_position")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:sync_rotation")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:sync_camera_rotation")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath(".:velocity")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath(".:health")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_2k4xv"]
+viewport_path = NodePath("HealthBar3D/SubViewport")
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_kj2p4")
+bullet_scene = ExtResource("2_r5m3p")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_q8p2x")
+surface_material_override/0 = SubResource("StandardMaterial3D_6y5xv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_w5dlc")
+
+[node name="CameraMount" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraMount"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="BulletSpawn" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.1
+delta_interval = 0.1
+replication_config = SubResource("SceneReplicationConfig_j2p4x")
+
+[node name="HealthBar3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_2k4xv")
+
+[node name="SubViewport" type="SubViewport" parent="HealthBar3D"]
+transparent_bg = true
+size = Vector2i(200, 20)
+
+[node name="ProgressBar" type="ProgressBar" parent="HealthBar3D/SubViewport"]
+offset_right = 200.0
+offset_bottom = 20.0
+value = 100.0
+show_percentage = false

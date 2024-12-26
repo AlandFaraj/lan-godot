@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://b7f3dyqfh10yh"]
+
+[ext_resource type="Script" path="res://SceneManager.gd" id="1_2p4xv"]
+[ext_resource type="PackedScene" uid="uid://bdes5a2gwy7ds" path="res://Player3D.tscn" id="2_r5m3p"]
+[ext_resource type="PackedScene" path="res://PauseMenu.tscn" id="3_menu"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_q8p2x"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6y5xv"]
+albedo_color = Color(0.380821, 0.224798, 0.447734, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w5dlc"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="Environment" id="Environment_k2p4x"]
+background_mode = 1
+background_color = Color(0.449402, 0.514862, 0.609197, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="TestScene" type="Node3D"]
+script = ExtResource("1_2p4xv")
+PlayerScene = ExtResource("2_r5m3p")
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+collision_mask = 3
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_q8p2x")
+surface_material_override/0 = SubResource("StandardMaterial3D_6y5xv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_w5dlc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_k2p4x")
+
+[node name="SpawnPoints" type="Node3D" parent="."]
+
+[node name="SpawnPoint1" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, -10)
+
+[node name="SpawnPoint2" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, -10)
+
+[node name="SpawnPoint3" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, 10)
+
+[node name="SpawnPoint4" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 10)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="UI" instance=ExtResource("3_menu")]

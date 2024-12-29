@@ -19,6 +19,18 @@ func _on_resume_button_pressed():
 	toggle_pause_menu()
 
 func _on_quit_button_pressed():
-	# Return to the multiplayer menu
-	get_tree().root.get_node("MultiplayerController").show()
-	get_parent().queue_free()
+	# Properly cleanup multiplayer
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+		multiplayer.multiplayer_peer = null
+	
+	# Reset mouse mode
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	# Get the current scene root (game scene)
+	var current_scene = get_tree().get_root().get_node("TestScene")
+	if current_scene:
+		current_scene.queue_free()
+	
+	# Change to menu scene
+	get_tree().change_scene_to_file("res://multiplayerScene.tscn")

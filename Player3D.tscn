@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bdes5a2gwy7ds"]
 
 [ext_resource type="Script" path="res://player3D.gd" id="1_kj2p4"]
-[ext_resource type="PackedScene" path="res://Bullet3D.tscn" id="2_r5m3p"]
+[ext_resource type="PackedScene" uid="uid://b4e3cfw0fxhhv" path="res://Bullet3D.tscn" id="2_r5m3p"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_q8p2x"]
 
@@ -55,7 +55,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 [node name="Camera3D" type="Camera3D" parent="CameraMount"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
 
-[node name="BulletSpawn" type="Marker3D" parent="."]
+[node name="BulletSpawn" type="Marker3D" parent="CameraMount"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]

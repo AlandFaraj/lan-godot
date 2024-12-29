@@ -14,6 +14,8 @@ var sync_camera_rotation = Vector3.ZERO
 
 @onready var camera_mount = $CameraMount
 @onready var health_bar = $HealthBar3D/SubViewport/ProgressBar
+@onready var bullet_spawn = $CameraMount/BulletSpawn
+@onready var camera = $CameraMount/Camera3D
 
 
 func _ready():
@@ -57,7 +59,17 @@ func _physics_process(delta):
 			shoot.rpc()
 
 		# Get the input direction and handle the movement/deceleration
-		var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+		var input_dir = Vector2.ZERO
+		if Input.is_action_pressed("move_forward"):
+			input_dir.y -= 1
+		if Input.is_action_pressed("move_back"):
+			input_dir.y += 1
+		if Input.is_action_pressed("move_left"):
+			input_dir.x -= 1
+		if Input.is_action_pressed("move_right"):
+			input_dir.x += 1
+		input_dir = input_dir.normalized()
+		
 		var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 		
 		if direction:
@@ -81,10 +93,36 @@ func _physics_process(delta):
 
 @rpc("any_peer", "call_local")
 func shoot():
+	if !bullet_spawn:
+		push_error("BulletSpawn node not found!")
+		return
+		
+	if !is_inside_tree():
+		push_error("Player node not in scene tree!")
+		return
+		
 	var bullet = bullet_scene.instantiate()
-	bullet.global_position = $BulletSpawn.global_position
-	bullet.transform.basis = $BulletSpawn.global_transform.basis
-	get_tree().root.add_child(bullet)
+	if !bullet:
+		push_error("Failed to instantiate bullet scene!")
+		return
+		
+	# Add bullet to the game world first
+	var root = get_tree().get_root()
+	if root:
+		root.add_child(bullet)
+		
+		# Now set transform after adding to scene tree
+		var spawn_transform = bullet_spawn.global_transform
+		bullet.global_position = spawn_transform.origin
+		
+		# Get the horizontal direction from the player's rotation
+		var direction = -global_transform.basis.z
+		direction.y = 0
+		direction = direction.normalized()
+		bullet.basis = global_transform.basis
+	else:
+		push_error("Could not find root node!")
+		bullet.queue_free()
 
 @rpc("any_peer", "call_local")
 func take_damage(amount: int):

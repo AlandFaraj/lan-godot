@@ -9,6 +9,7 @@ size = Vector3(0.2, 0.2, 0.5)
 albedo_color = Color(1, 0.8, 0, 1)
 emission_enabled = true
 emission = Color(1, 0.8, 0, 1)
+emission_energy_multiplier = 8.09
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_f3dlc"]
 size = Vector3(0.2, 0.2, 0.5)
@@ -29,4 +30,4 @@ shape = SubResource("BoxShape3D_f3dlc")
 wait_time = 5.0
 autostart = true
 
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"] 
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

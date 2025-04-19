@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://n8uw7e46wtwq"]
 
-[ext_resource type="Script" path="res://MutiplayerController.gd" id="1_omkav"]
-[ext_resource type="Script" path="res://ServerBrowser.gd" id="2_njv3o"]
-[ext_resource type="PackedScene" uid="uid://bxn0bmyl8xqlk" path="res://server_info.tscn" id="3_jpahl"]
+[ext_resource type="Script" uid="uid://cjmfc3eynucc8" path="res://scripts/networking/MutiplayerController.gd" id="1_sogkd"]
+[ext_resource type="Script" uid="uid://c6bit513kfmka" path="res://scripts/networking/ServerBrowser.gd" id="2_bet2f"]
+[ext_resource type="PackedScene" uid="uid://bxn0bmyl8xqlk" path="res://scenes/ui/server_info.tscn" id="3_pu85q"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -11,7 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_omkav")
+script = ExtResource("1_sogkd")
 Address = "127.0.0.1"
 
 [node name="Host" type="Button" parent="."]
@@ -57,8 +57,8 @@ text = "Name"
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("2_njv3o")
-serverInfo = ExtResource("3_jpahl")
+script = ExtResource("2_bet2f")
+serverInfo = ExtResource("3_pu85q")
 
 [node name="BroadcastTimer" type="Timer" parent="ServerBrowser"]
 

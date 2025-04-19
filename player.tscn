@@ -1,9 +1,96 @@
-[gd_scene load_steps=20 format=3 uid="uid://cwld7ti0ms68j"]
+[gd_scene load_steps=23 format=3 uid="uid://dhuse5f1c7qm6"]
 
-[ext_resource type="Script" path="res://player.gd" id="1_3us0m"]
-[ext_resource type="Texture2D" uid="uid://dld54qw3mao0w" path="res://Main Character - Male - Full spritesheet - No Guide.png" id="1_grirq"]
-[ext_resource type="Texture2D" uid="uid://tcgb3bjp6hyi" path="res://Famas.png" id="2_8kqsh"]
-[ext_resource type="PackedScene" uid="uid://lviwd7iyvso6" path="res://Bullet.tscn" id="2_gobh3"]
+[ext_resource type="Texture2D" uid="uid://dld54qw3mao0w" path="res://assets/textures/Main Character - Male - Full spritesheet - No Guide.png" id="1_grirq"]
+[ext_resource type="Texture2D" uid="uid://durtpmgnbsvn3" path="res://icon.svg" id="1_i3pqv"]
+[ext_resource type="Texture2D" uid="uid://tcgb3bjp6hyi" path="res://assets/textures/Famas.png" id="2_8kqsh"]
+
+[sub_resource type="GDScript" id="GDScript_wcre3"]
+script/source = "extends CharacterBody2D
+
+
+const SPEED = 300.0
+const JUMP_VELOCITY = -400.0
+# Get the gravity from the project settings to be synced with RigidBody nodes.
+var gravity = ProjectSettings.get_setting(\"physics/2d/default_gravity\")
+var syncPos = Vector2(0,0)
+var syncRot = 0
+@export var bullet :PackedScene
+
+func _ready():
+	$MultiplayerSynchronizer.set_multiplayer_authority(str(name).to_int())
+
+func _physics_process(delta):
+	if $MultiplayerSynchronizer.get_multiplayer_authority() == multiplayer.get_unique_id():
+		# Add the gravity.
+		if not is_on_floor():
+			velocity.y += gravity * delta
+			
+		$GunRotation.look_at(get_viewport().get_mouse_position())
+		# Handle Jump.
+		if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+			velocity.y = JUMP_VELOCITY
+		
+		syncPos = global_position
+		syncRot = rotation_degrees
+		if Input.is_action_just_pressed(\"Fire\"):
+			fire.rpc()
+		# Get the input direction and handle the movement/deceleration.
+		# As good practice, you should replace UI actions with custom gameplay actions.
+		var direction = Input.get_axis(\"ui_left\", \"ui_right\")
+		if direction:
+			velocity.x = direction * SPEED
+		else:
+			velocity.x = move_toward(velocity.x, 0, SPEED)
+
+		move_and_slide()
+	else:
+		global_position = global_position.lerp(syncPos, .5)
+		rotation_degrees = lerpf(rotation_degrees, syncRot, .5)
+
+@rpc(\"any_peer\",\"call_local\")
+func fire():
+	var b = bullet.instantiate()
+	b.global_position = $GunRotation/BulletSpawn.global_position
+	b.rotation_degrees = $GunRotation.rotation_degrees
+	get_tree().root.add_child(b)
+"
+
+[sub_resource type="GDScript" id="GDScript_me6x2"]
+script/source = "extends CharacterBody2D
+
+
+const SPEED = 500.0
+
+# Get the gravity from the project settings to be synced with RigidBody nodes.
+var gravity = ProjectSettings.get_setting(\"physics/2d/default_gravity\")
+var direction : Vector2
+
+func _ready():
+	direction = Vector2(1,0).rotated(rotation)
+
+func _physics_process(delta):
+	# Add the gravity.
+	velocity = SPEED * direction
+	if not is_on_floor():
+		velocity.y += gravity * 1 * delta
+	move_and_slide()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e3xmc"]
+size = Vector2(30, 6)
+
+[sub_resource type="PackedScene" id="PackedScene_k6gjx"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"names": PackedStringArray("Node2D", "CharacterBody2D", "position", "script", "Icon", "Sprite2D", "position", "scale", "texture", "CollisionShape2D", "CollisionShape2D", "position", "shape"),
+"node_count": 3,
+"node_paths": [NodePath("."), NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 2, 2, 0, 3, 1, 0, 1073741824, 0, 5, 4, -1, 3, 6, 2, 7, 3, 8, 4, 0, 1073741825, 0, 10, 9, -1, 2, 11, 5, 12, 6, 0),
+"variants": [Vector2(1, -1), SubResource("GDScript_me6x2"), Vector2(14, 0), Vector2(0.226563, 0.0390625), ExtResource("1_i3pqv"), Vector2(14, 0), SubResource("RectangleShape2D_e3xmc")],
+"version": 3
+}
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wskdl"]
 atlas = ExtResource("1_grirq")
@@ -120,8 +207,8 @@ properties/3/spawn = true
 properties/3/replication_mode = 1
 
 [node name="Player2" type="CharacterBody2D" groups=["Player"]]
-script = ExtResource("1_3us0m")
-bullet = ExtResource("2_gobh3")
+script = SubResource("GDScript_wcre3")
+bullet = SubResource("PackedScene_k6gjx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1

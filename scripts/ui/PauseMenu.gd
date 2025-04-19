@@ -33,4 +33,4 @@ func _on_quit_button_pressed():
 		current_scene.queue_free()
 	
 	# Change to menu scene
-	get_tree().change_scene_to_file("res://multiplayerScene.tscn")
+	get_tree().change_scene_to_file("res://scenes/multiplayer/multiplayerScene.tscn")

@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Lan godot"
-run/main_scene="res://multiplayerScene.tscn"
-config/features=PackedStringArray("4.3", "Mobile")
+run/main_scene="res://scenes/multiplayer/multiplayerScene.tscn"
+config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GameManager="*res://GameManager.gd"
+GameManager="*res://scripts/game/GameManager.gd"
 
 [input]
 

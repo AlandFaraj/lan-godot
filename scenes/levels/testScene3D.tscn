@@ -1,9 +1,9 @@
 [gd_scene load_steps=11 format=3 uid="uid://b7f3dyqfh10yh"]
 
-[ext_resource type="Script" path="res://SceneManager.gd" id="1_2p4xv"]
-[ext_resource type="PackedScene" uid="uid://bdes5a2gwy7ds" path="res://Player3D.tscn" id="2_r5m3p"]
-[ext_resource type="Texture2D" uid="uid://cutaf3cy5ag4k" path="res://prototype_512x512_grey4.png" id="3_iid80"]
-[ext_resource type="PackedScene" path="res://PauseMenu.tscn" id="3_menu"]
+[ext_resource type="Script" uid="uid://chl4atcucrfu" path="res://scripts/game/SceneManager.gd" id="1_2p4xv"]
+[ext_resource type="PackedScene" uid="uid://bdes5a2gwy7ds" path="res://scenes/player/Player3D.tscn" id="2_r5m3p"]
+[ext_resource type="Texture2D" uid="uid://cutaf3cy5ag4k" path="res://assets/textures/prototype_512x512_grey4.png" id="3_iid80"]
+[ext_resource type="PackedScene" uid="uid://bw0wl2u2vr6ox" path="res://scenes/ui/PauseMenu.tscn" id="3_menu"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_q8p2x"]
 size = Vector3(50, 1, 50)

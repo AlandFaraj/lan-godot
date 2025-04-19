@@ -17,10 +17,6 @@ func _ready():
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
 # this get called on the server and clients
 func peer_connected(id):
 	print("Player Connected " + str(id))
@@ -43,10 +39,10 @@ func connection_failed():
 	print("Couldnt Connect")
 
 @rpc("any_peer")
-func SendPlayerInformation(name, id):
+func SendPlayerInformation(player_name, id):
 	if !GameManager.Players.has(id):
 		GameManager.Players[id] = {
-			"name": name,
+			"name": player_name,
 			"id": id,
 			"score": 0
 		}
@@ -60,13 +56,13 @@ func StartGame():
 	print("StartGame called on peer: ", multiplayer.get_unique_id())
 	# Make sure we're not already in the game scene
 	for child in get_tree().root.get_children():
-		if child.scene_file_path == "res://testScene3D.tscn":
+		if child.scene_file_path == "res://scenes/levels/testScene3D.tscn":
 			print("Game scene already exists, skipping")
 			return
 	
 	print("Loading game scene")
 	# Load and setup the game scene
-	var scene = load("res://testScene3D.tscn").instantiate()
+	var scene = load("res://scenes/levels/testScene3D.tscn").instantiate()
 	
 	# Add to root but make sure it's properly setup for networking
 	print("Adding scene to tree")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bdes5a2gwy7ds"]
 
-[ext_resource type="Script" path="res://player3D.gd" id="1_kj2p4"]
-[ext_resource type="PackedScene" uid="uid://b4e3cfw0fxhhv" path="res://Bullet3D.tscn" id="2_r5m3p"]
+[ext_resource type="Script" uid="uid://clfosu6olmnyg" path="res://scripts/player/player3D.gd" id="1_kj2p4"]
+[ext_resource type="PackedScene" uid="uid://b4e3cfw0fxhhv" path="res://scenes/weapons/Bullet3D.tscn" id="2_r5m3p"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_q8p2x"]
 

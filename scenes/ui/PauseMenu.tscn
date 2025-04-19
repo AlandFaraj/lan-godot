@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://bw0wl2u2vr6ox"]
 
-[ext_resource type="Script" path="res://PauseMenu.gd" id="1_menu"]
+[ext_resource type="Script" uid="uid://cjotllfuist5a" path="res://scripts/ui/PauseMenu.gd" id="1_menu"]
 
 [node name="PauseMenu" type="Control"]
 process_mode = 3
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
 
-[node name="Panel" type="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -44,4 +44,4 @@ layout_mode = 2
 text = "Quit to Menu"
 
 [connection signal="pressed" from="Panel/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"] 
+[connection signal="pressed" from="Panel/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

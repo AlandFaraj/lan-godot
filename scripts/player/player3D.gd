@@ -51,11 +51,11 @@ func _physics_process(delta):
 			velocity.y -= gravity * delta
 
 		# Handle Jump
-		if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+		if Input.is_action_just_pressed("jump") and is_on_floor():
 			velocity.y = JUMP_VELOCITY
 
 		# Handle shooting
-		if Input.is_action_just_pressed("primary_action"):
+		if Input.is_action_just_pressed("shoot"):
 			shoot.rpc()
 
 		# Get the input direction and handle the movement/deceleration
@@ -116,7 +116,7 @@ func shoot():
 		bullet.global_position = spawn_transform.origin
 		
 		# Get the horizontal direction from the player's rotation
-		var direction = -global_transform.basis.z
+		var direction = - global_transform.basis.z
 		direction.y = 0
 		direction = direction.normalized()
 		bullet.basis = global_transform.basis

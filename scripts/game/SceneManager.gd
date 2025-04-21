@@ -24,11 +24,17 @@ func _ready():
 		add_player(1)
 	else:
 		print("Client setup starting")
-		# Client setup
-		# Make sure client can see the world
+		# Client setup: make scene visible
 		get_tree().set_pause(false)
-		
-		# Request spawn from server
+		# Spawn existing players (server and other clients)
+		for id in multiplayer.get_peers():
+			print("Spawning existing peer: ", id)
+			spawn_player(id)
+		# Spawn local player
+		var my_id = multiplayer.get_unique_id()
+		print("Spawning local player: ", my_id)
+		spawn_player(my_id)
+		# Now request spawn from server for other clients
 		print("Client requesting spawn")
 		request_spawn.rpc_id(1)
 

@@ -20,6 +20,8 @@ func _ready():
 # this get called on the server and clients
 func peer_connected(id):
 	print("Player Connected " + str(id))
+	if multiplayer.is_server() and id != multiplayer.get_unique_id():
+		StartGame.rpc_id(id)
 	
 # this get called on the server and clients
 func peer_disconnected(id):

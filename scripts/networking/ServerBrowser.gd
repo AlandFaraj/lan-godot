@@ -1,18 +1,16 @@
 extends Control
 
-signal  found_server
-signal  server_removed
 signal joinGame(ip)
-var broadcastTimer : Timer
+var broadcastTimer: Timer
 
-var RoomInfo = {"name":"name", "playerCount": 0}
-var broadcaster : PacketPeerUDP
-var listner : PacketPeerUDP
-@export var listenPort : int = 8911
-@export var broadcastPort : int = 8912
-@export var broadcastAddress : String = '192.168.1.255'
+var RoomInfo = {"name": "name", "playerCount": 0}
+var broadcaster: PacketPeerUDP
+var listner: PacketPeerUDP
+@export var listenPort: int = 8911
+@export var broadcastPort: int = 8912
+@export var broadcastAddress: String = '192.168.1.255'
 
-@export var serverInfo : PackedScene
+@export var serverInfo: PackedScene
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	broadcastTimer = $BroadcastTimer
@@ -24,15 +22,15 @@ func setUp():
 	var ok = listner.bind(listenPort)
 	
 	if ok == OK:
-		print("Bound to listen Port "  + str(listenPort) +  " Successful!")
-		$Label2.text="Bound To Listen Port: true"
+		print("Bound to listen Port " + str(listenPort) + " Successful!")
+		$Label2.text = "Bound To Listen Port: true"
 	else:
 		print("Failed to bind to listen port!")
-		$Label2.text="Bound To Listen Port: false"
+		$Label2.text = "Bound To Listen Port: false"
 		
 
-func setUpBroadCast(name):
-	RoomInfo.name = name
+func setUpBroadCast(roomName):
+	RoomInfo.name = roomName
 	RoomInfo.playerCount = GameManager.Players.size()
 	
 	broadcaster = PacketPeerUDP.new()
@@ -42,7 +40,7 @@ func setUpBroadCast(name):
 	var ok = broadcaster.bind(broadcastPort)
 	
 	if ok == OK:
-		print("Bound to Broadcast Port "  + str(broadcastPort) +  " Successful!")
+		print("Bound to Broadcast Port " + str(broadcastPort) + " Successful!")
 	else:
 		print("Failed to bind to broadcast port!")
 		
@@ -50,8 +48,7 @@ func setUpBroadCast(name):
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	
+func _process(_delta):
 	if listner.get_available_packet_count() > 0:
 		var serverip = listner.get_packet_ip()
 		var serverport = listner.get_packet_port()
@@ -59,7 +56,7 @@ func _process(delta):
 		var data = bytes.get_string_from_ascii()
 		var roomInfo = JSON.parse_string(data)
 		
-		print("server Ip: " + serverip +" serverPort: "+ str(serverport) + " room info: " + str(roomInfo))
+		print("server Ip: " + serverip + " serverPort: " + str(serverport) + " room info: " + str(roomInfo))
 		
 		for i in $Panel/VBoxContainer.get_children():
 			if i.name == roomInfo.name:

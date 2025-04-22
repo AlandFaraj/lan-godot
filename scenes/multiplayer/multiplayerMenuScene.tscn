@@ -113,15 +113,11 @@ anim_speed_max = 1.0
 
 [node name="MainPanel" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -270.0
-offset_right = 400.0
-offset_bottom = 270.0
+anchors_preset = -1
+anchor_left = 0.15
+anchor_top = 0.15
+anchor_right = 0.85
+anchor_bottom = 0.85
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_q832g")
@@ -137,17 +133,6 @@ theme_override_constants/margin_bottom = 25
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="TitleLabel" type="Label" parent="MainPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
-theme_override_font_sizes/font_size = 32
-text = "LAN MULTIPLAYER"
-horizontal_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="MainPanel/MarginContainer/VBoxContainer"]
-modulate = Color(1, 1, 1, 0.3)
-layout_mode = 2
-
 [node name="PlayerSetupContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -156,6 +141,7 @@ layout_mode = 2
 text = "Player Name"
 
 [node name="LineEdit" type="LineEdit" parent="MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_colors/caret_color = Color(0.227451, 0.466667, 0.823529, 1)
 theme_override_colors/font_placeholder_color = Color(0.6, 0.611765, 0.65098, 0.6)
@@ -163,12 +149,26 @@ theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
 placeholder_text = "Enter your name"
 
+[node name="ServerNameLabel" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer"]
+layout_mode = 2
+text = "Server Name"
+
+[node name="ServerNameEdit" type="LineEdit" parent="MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_colors/caret_color = Color(0.227451, 0.466667, 0.823529, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.611765, 0.65098, 0.6)
+theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
+placeholder_text = "Enter server name"
+
 [node name="ButtonContainer" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 15
 alignment = 1
 
 [node name="Host" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
@@ -178,17 +178,6 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
 theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
 text = "HOST & START"
-
-[node name="Join" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ButtonContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
-theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
-text = "JOIN GAME"
 
 [node name="QuitButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ButtonContainer"]
 layout_mode = 2
@@ -233,14 +222,13 @@ text = "IP ADDRESS"
 [node name="PlayerCount" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.5
+size_flags_stretch_ratio = 0.35
 theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 1)
 text = "PLAYERS"
 
 [node name="Action" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.5
 theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 1)
 text = "ACTION"
 
@@ -288,6 +276,7 @@ theme_override_colors/font_placeholder_color = Color(0.6, 0.611765, 0.65098, 0.6
 theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_o7xgo")
 placeholder_text = "Enter IP address"
+flat = true
 
 [node name="JoinManualButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ManualIPContainer"]
 layout_mode = 2
@@ -300,6 +289,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
 text = "CONNECT"
 
 [node name="ServerBrowser" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -343,7 +333,6 @@ horizontal_alignment = 2
 vertical_alignment = 2
 
 [connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ButtonContainer/Host" to="." method="_on_host_button_down"]
-[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ButtonContainer/Join" to="." method="_on_join_button_down"]
 [connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ButtonContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/RefreshButton" to="ServerBrowser" method="refresh_servers"]
 [connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ManualIPContainer/JoinManualButton" to="." method="_on_manual_join_pressed"]

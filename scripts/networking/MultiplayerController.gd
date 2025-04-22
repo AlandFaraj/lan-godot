@@ -1,5 +1,6 @@
 extends Control
 
+const MENU_SCENE = "res://scenes/multiplayer/multiplayerMenuScene.tscn"
 @export var Address = "127.0.0.1"
 @export var port = 8910
 var peer
@@ -11,6 +12,7 @@ func _ready():
 	multiplayer.peer_disconnected.connect(peer_disconnected)
 	multiplayer.connected_to_server.connect(connected_to_server)
 	multiplayer.connection_failed.connect(connection_failed)
+	multiplayer.server_disconnected.connect(_on_server_disconnected)
 	if "--server" in OS.get_cmdline_args():
 		hostGame()
 	
@@ -97,16 +99,16 @@ func hostGame():
 	
 func _on_host_button_down():
 	hostGame()
-	SendPlayerInformation($MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer/LineEdit.text, multiplayer.get_unique_id())
-	$ServerBrowser.setUpBroadCast($MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer/LineEdit.text + "'s server")
+	var player_name = $MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer/LineEdit.text
+	var server_name = $MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer/ServerNameEdit.text
+	if server_name.strip_edges() == "":
+		server_name = player_name + "'s server"
+	SendPlayerInformation(player_name, multiplayer.get_unique_id())
+	$ServerBrowser.setUpBroadCast(server_name)
 	
 	# Auto-start the game when hosting
 	print("Auto-starting game as host...")
 	StartGame.rpc()
-
-func _on_join_button_down():
-	JoinByIP(Address)
-	pass # Replace with function body.
 
 func _on_start_game_button_down():
 	StartGame.rpc()
@@ -144,3 +146,14 @@ func JoinByIP(ip):
 
 func get_joined_ip():
 	return last_joined_ip
+
+func _on_server_disconnected():
+	print("Server disconnected, returning to menu")
+	multiplayer.set_multiplayer_peer(null)
+	# Free any leftover game scene instances to stop their scripts from running
+	for child in get_tree().root.get_children():
+		if child.scene_file_path == "res://scenes/levels/testScene3D.tscn":
+			child.queue_free()
+	get_viewport().warp_mouse(get_viewport().size / 2)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	get_tree().change_scene_to_file(MENU_SCENE)

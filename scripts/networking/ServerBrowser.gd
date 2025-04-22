@@ -120,7 +120,14 @@ func setUpBroadCast(roomName):
 	
 	# Only add the local server entry if actually hosting the game
 	if is_hosting_game:
-		update_server_info("127.0.0.1", RoomInfo)
+		var info = {
+			"name": RoomInfo.name,
+			"playerCount": RoomInfo.playerCount,
+			"instance_id": instance_id,
+			"listen_port": listenPort,
+			"is_hosting_game": true
+		}
+		update_server_info("127.0.0.1", info)
 	
 	# Send initial broadcasts to all known ports
 	_broadcast_to_all_ports()
@@ -163,11 +170,9 @@ func _handle_discovery_message(ip, data):
 	# Only process discovery messages from actual hosts
 	if not data.has("is_hosting_game") or not data.is_hosting_game:
 		return
-	# Check if this is our own message
+	# always skip our own discovery
 	if data.has("from_instance") and data.from_instance == instance_id:
-		# If not actually hosting the game, skip processing our own discovery
-		if not is_hosting_game:
-			return
+		return
 	# Create a unique identifier for this server
 	var server_id = "%s:%s" % [ip, data.from_instance]
 	
@@ -299,6 +304,7 @@ func _broadcast_to_all_ports():
 	# Make sure our info includes listen port and instance ID
 	RoomInfo.listen_port = listenPort
 	RoomInfo.instance_id = instance_id
+	RoomInfo.is_hosting_game = is_hosting_game
 	
 	var data = JSON.stringify(RoomInfo)
 	var packet = data.to_ascii_buffer()

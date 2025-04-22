@@ -1,8 +1,74 @@
-[gd_scene load_steps=4 format=3 uid="uid://b6654q0g0v7u3"]
+[gd_scene load_steps=10 format=3 uid="uid://b6654q0g0v7u3"]
 
-[ext_resource type="Script" uid="uid://clm7vnpp6041d" path="res://scripts/networking/MultiplayerController.gd" id="1_6no0y"]
-[ext_resource type="Script" uid="uid://c6bit513kfmka" path="res://scripts/networking/ServerBrowser.gd" id="2_ddqfo"]
-[ext_resource type="PackedScene" uid="uid://bxn0bmyl8xqlk" path="res://scenes/ui/server_info.tscn" id="3_cyokn"]
+[ext_resource type="Script" uid="uid://clm7vnpp6041d" path="res://scripts/networking/MultiplayerController.gd" id="1_gm76g"]
+[ext_resource type="Script" uid="uid://c6bit513kfmka" path="res://scripts/networking/ServerBrowser.gd" id="2_25j7p"]
+[ext_resource type="PackedScene" uid="uid://bxn0bmyl8xqlk" path="res://scenes/ui/server_info.tscn" id="3_y5564"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_j31a7"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q832g"]
+bg_color = Color(0.109804, 0.117647, 0.141176, 0.901961)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.290196, 0.313726, 0.376471, 0.501961)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2u4e"]
+bg_color = Color(0.14902, 0.160784, 0.196078, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.290196, 0.313726, 0.376471, 0.698039)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yk7f5"]
+bg_color = Color(0.227451, 0.466667, 0.823529, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.407843, 0.611765, 0.92549, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_23n1e"]
+bg_color = Color(0.188235, 0.388235, 0.686275, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.364706, 0.545098, 0.835294, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o7xgo"]
+bg_color = Color(0.14902, 0.160784, 0.196078, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.290196, 0.313726, 0.376471, 0.698039)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -11,115 +77,274 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_6no0y")
-Address = "127.0.0.1"
+script = ExtResource("1_gm76g")
 
-[node name="Host" type="Button" parent="."]
-layout_mode = 0
-offset_left = 74.0
-offset_top = 120.0
-offset_right = 251.0
-offset_bottom = 168.0
-text = "Host"
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0627451, 0.0666667, 0.0823529, 1)
 
-[node name="Join" type="Button" parent="."]
-layout_mode = 0
-offset_left = 270.0
-offset_top = 120.0
-offset_right = 447.0
-offset_bottom = 168.0
-text = "Join"
+[node name="BackgroundParticles" type="CPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_j31a7")
+position = Vector2(576, 324)
+amount = 30
+lifetime = 15.0
+preprocess = 15.0
+speed_scale = 0.5
+emission_shape = 3
+emission_rect_extents = Vector2(600, 350)
+direction = Vector2(0, -1)
+spread = 20.0
+gravity = Vector2(0, -5)
+initial_velocity_min = 2.0
+initial_velocity_max = 8.0
+angular_velocity_min = -10.0
+angular_velocity_max = 10.0
+scale_amount_min = 0.5
+scale_amount_max = 1.5
+color = Color(0.227451, 0.466667, 0.823529, 0.0784314)
+anim_speed_min = 1.0
+anim_speed_max = 1.0
 
-[node name="StartGame" type="Button" parent="."]
-layout_mode = 0
-offset_left = 479.0
-offset_top = 120.0
-offset_right = 656.0
-offset_bottom = 168.0
-text = "Start Game"
+[node name="MainPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -270.0
+offset_right = 400.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q832g")
 
-[node name="LineEdit" type="LineEdit" parent="."]
-layout_mode = 0
-offset_left = 156.0
-offset_top = 68.0
-offset_right = 508.0
-offset_bottom = 99.0
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 75.0
-offset_top = 70.0
-offset_right = 122.0
-offset_bottom = 96.0
-text = "Name"
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="TitleLabel" type="Label" parent="MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
+theme_override_font_sizes/font_size = 32
+text = "LAN MULTIPLAYER"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainPanel/MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0.3)
+layout_mode = 2
+
+[node name="PlayerSetupContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer"]
+layout_mode = 2
+text = "Player Name"
+
+[node name="LineEdit" type="LineEdit" parent="MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer"]
+layout_mode = 2
+theme_override_colors/caret_color = Color(0.227451, 0.466667, 0.823529, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.611765, 0.65098, 0.6)
+theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
+placeholder_text = "Enter your name"
+
+[node name="ButtonContainer" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Host" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
+theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
+text = "HOST & START"
+
+[node name="Join" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
+theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
+text = "JOIN GAME"
+
+[node name="QuitButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
+theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
+text = "QUIT"
+
+[node name="HSeparator2" type="HSeparator" parent="MainPanel/MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0.3)
+layout_mode = 2
+
+[node name="ServerListContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Available Servers"
+horizontal_alignment = 1
+
+[node name="ServerListHeader" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 1)
+text = "SERVER NAME"
+
+[node name="Ip" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 1)
+text = "IP ADDRESS"
+
+[node name="PlayerCount" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 1)
+text = "PLAYERS"
+
+[node name="Action" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 1)
+text = "ACTION"
+
+[node name="ServerListScroll" type="ScrollContainer" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ServerContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RefreshButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
+theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
+text = "Refresh List"
+
+[node name="HSeparator3" type="HSeparator" parent="MainPanel/MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0.3)
+layout_mode = 2
+
+[node name="ManualIPContainer" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ManualIPContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Manual IP:"
+vertical_alignment = 1
+
+[node name="ManualIPEdit" type="LineEdit" parent="MainPanel/MarginContainer/VBoxContainer/ManualIPContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/caret_color = Color(0.227451, 0.466667, 0.823529, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.611765, 0.65098, 0.6)
+theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_o7xgo")
+placeholder_text = "Enter IP address"
+
+[node name="JoinManualButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ManualIPContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
+theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
+text = "CONNECT"
 
 [node name="ServerBrowser" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("2_ddqfo")
-serverInfo = ExtResource("3_cyokn")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_25j7p")
+serverInfo = ExtResource("3_y5564")
 
 [node name="BroadcastTimer" type="Timer" parent="ServerBrowser"]
 
 [node name="Label2" type="Label" parent="ServerBrowser"]
+visible = false
 layout_mode = 0
 offset_left = 901.0
 offset_top = 15.0
 offset_right = 1148.0
 offset_bottom = 67.0
+mouse_filter = 1
 text = "Bound To 
 Listen Port: "
 
-[node name="Panel" type="Panel" parent="ServerBrowser"]
-layout_mode = 0
-offset_left = 44.0
-offset_top = 248.0
-offset_right = 687.0
-offset_bottom = 580.0
+[node name="VersionInfo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -23.0
+offset_right = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 0.501961)
+theme_override_font_sizes/font_size = 11
+text = "v1.0.0"
+horizontal_alignment = 2
+vertical_alignment = 2
 
-[node name="ServerInfo2" type="HBoxContainer" parent="ServerBrowser/Panel"]
-layout_mode = 2
-offset_top = 1.0
-offset_right = 643.0
-offset_bottom = 51.0
-
-[node name="Name" type="Label" parent="ServerBrowser/Panel/ServerInfo2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Name"
-
-[node name="Ip" type="Label" parent="ServerBrowser/Panel/ServerInfo2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "IP"
-
-[node name="PlayerCount" type="Label" parent="ServerBrowser/Panel/ServerInfo2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Player Count"
-
-[node name="PlayerCount2" type="Label" parent="ServerBrowser/Panel/ServerInfo2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Join"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ServerBrowser/Panel"]
-layout_mode = 0
-offset_top = 53.0
-offset_right = 643.0
-offset_bottom = 329.0
-
-[node name="Button" type="Button" parent="."]
-layout_mode = 0
-offset_left = 898.0
-offset_top = 104.0
-offset_right = 1123.0
-offset_bottom = 173.0
-text = "test add player (host)"
-
-[connection signal="button_down" from="Host" to="." method="_on_host_button_down"]
-[connection signal="button_down" from="Join" to="." method="_on_join_button_down"]
-[connection signal="button_down" from="StartGame" to="." method="_on_start_game_button_down"]
+[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ButtonContainer/Host" to="." method="_on_host_button_down"]
+[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ButtonContainer/Join" to="." method="_on_join_button_down"]
+[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ButtonContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/RefreshButton" to="ServerBrowser" method="refresh_servers"]
+[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ManualIPContainer/JoinManualButton" to="." method="_on_manual_join_pressed"]
 [connection signal="timeout" from="ServerBrowser/BroadcastTimer" to="ServerBrowser" method="_on_broadcast_timer_timeout"]
-[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]

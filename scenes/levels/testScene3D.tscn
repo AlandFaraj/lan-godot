@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b7f3dyqfh10yh"]
+[gd_scene load_steps=12 format=3 uid="uid://b7f3dyqfh10yh"]
 
 [ext_resource type="Script" uid="uid://chl4atcucrfu" path="res://scripts/game/SceneManager.gd" id="1_2p4xv"]
 [ext_resource type="PackedScene" uid="uid://bdes5a2gwy7ds" path="res://scenes/player/Player3D.tscn" id="2_r5m3p"]
@@ -46,6 +46,13 @@ glow_bloom = 0.24
 fog_light_color = Color(0.117647, 0.133333, 0.180392, 1)
 fog_density = 0.001
 volumetric_fog_density = 0.01
+
+[sub_resource type="LabelSettings" id="LabelSettings_4vfhr"]
+font_size = 14
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.498039)
 
 [node name="TestScene" type="Node3D"]
 script = ExtResource("1_2p4xv")
@@ -111,3 +118,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 10)
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="PauseMenu" parent="UI" instance=ExtResource("3_menu")]
+
+[node name="IPAddressDisplay" type="Label" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 36.0
+grow_horizontal = 0
+text = "IP: Connecting..."
+label_settings = SubResource("LabelSettings_4vfhr")
+horizontal_alignment = 2
+vertical_alignment = 1

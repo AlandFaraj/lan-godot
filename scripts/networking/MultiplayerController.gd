@@ -1,8 +1,9 @@
 extends Control
 
-@export var Address = "204.48.28.159"
+@export var Address = "127.0.0.1"
 @export var port = 8910
 var peer
+var last_joined_ip = ""
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -34,7 +35,7 @@ func peer_disconnected(id):
 # called only from clients
 func connected_to_server():
 	print("connected To Sever!")
-	SendPlayerInformation.rpc_id(1, $LineEdit.text, multiplayer.get_unique_id())
+	SendPlayerInformation.rpc_id(1, $MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer/LineEdit.text, multiplayer.get_unique_id())
 
 # called only from clients
 func connection_failed():
@@ -61,7 +62,7 @@ func StartGame():
 		if child.scene_file_path == "res://scenes/levels/testScene3D.tscn":
 			print("Game scene already exists, skipping")
 			return
-	
+			
 	print("Loading game scene")
 	# Load and setup the game scene
 	var scene = load("res://scenes/levels/testScene3D.tscn").instantiate()
@@ -76,6 +77,10 @@ func StartGame():
 	# Make sure the scene is not paused
 	get_tree().paused = false
 	
+	# Set is_hosting_game true if this is the server - ONLY after the scene is ready
+	if multiplayer.is_server():
+		$ServerBrowser.is_hosting_game = true
+		
 	print("Game scene setup complete")
 
 func hostGame():
@@ -92,20 +97,16 @@ func hostGame():
 	
 func _on_host_button_down():
 	hostGame()
-	SendPlayerInformation($LineEdit.text, multiplayer.get_unique_id())
-	$ServerBrowser.setUpBroadCast($LineEdit.text + "'s server")
-	pass # Replace with function body.
-
+	SendPlayerInformation($MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer/LineEdit.text, multiplayer.get_unique_id())
+	$ServerBrowser.setUpBroadCast($MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer/LineEdit.text + "'s server")
+	
+	# Auto-start the game when hosting
+	print("Auto-starting game as host...")
+	StartGame.rpc()
 
 func _on_join_button_down():
 	JoinByIP(Address)
 	pass # Replace with function body.
-
-func JoinByIP(ip):
-	peer = ENetMultiplayerPeer.new()
-	peer.create_client(ip, port)
-	peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
-	multiplayer.set_multiplayer_peer(peer)
 
 func _on_start_game_button_down():
 	StartGame.rpc()
@@ -119,3 +120,27 @@ func _on_button_button_down():
 			"score": 0
 		}
 	pass # Replace with function body.
+
+func _on_quit_button_pressed():
+	# Set is_hosting_game false when quitting
+	$ServerBrowser.is_hosting_game = false
+	get_tree().quit()
+
+func _on_manual_join_pressed():
+	var ip_text = $MainContainer/VBoxContainer/ServerList/ManualIPContainer/ManualIPEdit.text
+	if ip_text.strip_edges() != "":
+		JoinByIP(ip_text)
+	else:
+		# Could add a visual feedback here like a popup
+		print("Please enter a valid IP address")
+
+func JoinByIP(ip):
+	last_joined_ip = ip
+	GameManager.last_joined_ip = ip
+	peer = ENetMultiplayerPeer.new()
+	peer.create_client(ip, port)
+	peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
+	multiplayer.set_multiplayer_peer(peer)
+
+func get_joined_ip():
+	return last_joined_ip

@@ -22,6 +22,9 @@ func _ready():
 		# Spawn local player
 		print("Spawning server player")
 		add_player(1)
+		
+		# Update IP display for server
+		update_ip_display()
 	else:
 		print("Client setup starting")
 		# Client setup: make scene visible
@@ -37,6 +40,30 @@ func _ready():
 		# Now request spawn from server for other clients
 		print("Client requesting spawn")
 		request_spawn.rpc_id(1)
+		
+		# Update IP display for client
+		update_ip_display()
+
+func update_ip_display():
+	var ip_label = $UI/IPAddressDisplay
+	if ip_label:
+		var ip_text = "IP: "
+		if multiplayer.is_server():
+			ip_text += get_local_ip()
+		else:
+			# Get the joined IP from GameManager singleton
+			if GameManager.last_joined_ip != "":
+				ip_text += GameManager.last_joined_ip
+			else:
+				ip_text += "Unknown"
+		ip_label.text = ip_text
+
+func get_local_ip() -> String:
+	var ip_addresses = IP.get_local_addresses()
+	for ip in ip_addresses:
+		if ip.begins_with("192.168.") or ip.begins_with("10.") or ip.begins_with("172."):
+			return ip
+	return "127.0.0.1" # Fallback to localhost if no local IP found
 
 func get_random_spawn_point() -> Vector3:
 	var spawn_points = $SpawnPoints.get_children()

@@ -31,9 +31,27 @@ func _ready():
 	broadcastTimer = $BroadcastTimer
 	instance_id = str(randi()).substr(0, 4)
 	print("Instance ID: ", instance_id)
+	
+	# Initialize RoomInfo with required fields
+	RoomInfo = {
+		"name": "Player's Game",
+		"playerCount": 0,
+		"instance_id": instance_id,
+		"listen_port": listenPort,
+		"is_hosting_game": is_hosting_game
+	}
+	
 	setUp()
 	setup_discovery()
 	setup_server_list_update_timer()
+	
+	# Print debug message for server list path
+	var server_container = get_node_or_null(server_list_container_path)
+	if server_container:
+		print("Server container found: ", server_container.get_path())
+	else:
+		print("WARNING: Server container not found at path: ", server_list_container_path)
+		print("Current path: ", get_path())
 	
 func setUp():
 	listner = PacketPeerUDP.new()
@@ -167,17 +185,15 @@ func _process(_delta):
 					print("Added new port to broadcast list: ", sender_port)
 
 func _handle_discovery_message(ip, data):
-	# Only process discovery messages from actual hosts
-	if not data.has("is_hosting_game") or not data.is_hosting_game:
-		return
-	# always skip our own discovery
+	# Accept discovery messages even from non-hosts to improve discovery
 	if data.has("from_instance") and data.from_instance == instance_id:
-		return
+		return # Skip our own discovery messages
+	
 	# Create a unique identifier for this server
-	var server_id = "%s:%s" % [ip, data.from_instance]
+	var server_id = "%s:%s" % [ip, data.get("from_instance", "unknown")]
 	
 	# Convert port to integer
-	var server_port = int(data.listen_port)
+	var server_port = int(data.get("listen_port", 8911))
 	
 	# Check if we've processed a discovery from this server recently
 	var current_time = Time.get_unix_time_from_system()
@@ -190,19 +206,21 @@ func _handle_discovery_message(ip, data):
 	
 	# First time we're seeing this server or cooldown has expired
 	if not known_servers.has(server_id):
-		print("Discovered new server at %s on port %d" % [ip, server_port])
+		print("Discovered new server/client at %s on port %d" % [ip, server_port])
 		
-		# Add to our known servers
-		known_servers[server_id] = {
-			"ip": ip,
-			"instance_id": data.from_instance,
-			"listen_port": server_port,
-			"last_seen": current_time,
-			"server_name": "Unknown Server", # Default name until we get game info
-			"player_count": 0 # Default player count
-		}
+		# Add to our known servers if it's a host
+		if data.get("is_hosting_game", false):
+			known_servers[server_id] = {
+				"ip": ip,
+				"instance_id": data.get("from_instance", "unknown"),
+				"listen_port": server_port,
+				"last_seen": current_time,
+				"server_name": "Unknown Server", # Default name until we get game info
+				"player_count": 0 # Default player count
+			}
+			print("Added as a known server because it's hosting")
 		
-		# Add this port to our broadcast list
+		# Add this port to our broadcast list regardless
 		if server_port > 0 and not broadcast_ports.has(server_port):
 			broadcast_ports.append(server_port)
 			print("Added new port to broadcast list: ", server_port)
@@ -246,8 +264,13 @@ func _on_server_list_update_timer_timeout():
 	# Get the server container, where all the server entries are displayed
 	var server_container = get_node_or_null(server_list_container_path)
 	if not server_container:
+		print("WARNING: Server container not found at path: " + server_list_container_path)
 		return
-		
+	
+	# Debug info about known servers
+	if known_servers.size() > 0:
+		print("Known servers: %d" % known_servers.size())
+	
 	# First, remove any servers from UI that are not in our known_servers list
 	var existing_nodes = server_entry_nodes.keys()
 	for server_id in existing_nodes:
@@ -283,6 +306,7 @@ func _on_server_list_update_timer_timeout():
 			
 			# Store reference to the node
 			server_entry_nodes[server_id] = info_node
+			print("Added server to UI: %s (%s)" % [server_name, ip])
 
 # Helper function to add or update server entries in the UI - DEPRECATED, use update_server_info instead
 func add_or_update_server_entry(ip: String, info: Dictionary):
@@ -325,8 +349,7 @@ func _broadcast_to_all_ports():
 		print("Broadcasting Game to %d ports and %d known servers" % [broadcast_ports.size(), known_servers.size()])
 
 func _send_discovery_broadcast():
-	if not is_hosting_game:
-		return
+	# Send discovery broadcasts even if not hosting to discover other servers
 	var message = {
 		"message_type": "discovery",
 		"from_instance": instance_id,
@@ -338,9 +361,13 @@ func _send_discovery_broadcast():
 	var packet = data.to_ascii_buffer()
 	
 	# Broadcast to all known ports
+	var sent_count = 0
 	for port in broadcast_ports:
 		if discovery_broadcaster.set_dest_address(broadcastAddress, port) == OK:
 			discovery_broadcaster.put_packet(packet)
+			sent_count += 1
+	
+	print("Sent discovery broadcasts to %d ports" % sent_count)
 
 func _send_direct_discovery(ip, port):
 	if not is_hosting_game:
@@ -436,6 +463,7 @@ func refresh_servers():
 	# If hosting, re-add local server immediately after clearing
 	if is_hosting_game and broadcaster: # Check if we are currently hosting the game
 		update_server_info("127.0.0.1", RoomInfo)
+		print("Added local server to list: %s (127.0.0.1)" % RoomInfo.name)
 
 # Utility function to get local non-loopback IP (may not work on all platforms/configs)
 func get_local_ip() -> String:

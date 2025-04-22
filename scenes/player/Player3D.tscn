@@ -32,6 +32,12 @@ properties/6/replication_mode = 1
 properties/7/path = NodePath(".:player_color")
 properties/7/spawn = true
 properties/7/replication_mode = 1
+properties/8/path = NodePath(".:kills")
+properties/8/spawn = true
+properties/8/replication_mode = 1
+properties/9/path = NodePath(".:deaths")
+properties/9/spawn = true
+properties/9/replication_mode = 1
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_2k4xv"]
 viewport_path = NodePath("HealthBar3D/SubViewport")

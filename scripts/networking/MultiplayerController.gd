@@ -55,12 +55,7 @@ func connected_to_server():
 		player_name = "Player"
 	# Locally store our own player info so spawn_player won't default to white
 	var my_id = multiplayer.get_unique_id()
-	GameManager.Players[my_id] = {
-		"name": player_name,
-		"id": my_id,
-		"score": 0,
-		"color": player_color
-	}
+	GameManager.init_player_stats(my_id, player_name, player_color)
 	# Send our player info to the server (id 1)
 	SendPlayerInformation.rpc_id(1, player_name, my_id, player_color)
 
@@ -71,12 +66,7 @@ func connection_failed():
 @rpc("any_peer")
 func SendPlayerInformation(player_name, id, color):
 	if !GameManager.Players.has(id):
-		GameManager.Players[id] = {
-			"name": player_name,
-			"id": id,
-			"score": 0,
-			"color": color
-		}
+		GameManager.init_player_stats(id, player_name, color)
 	else:
 		# Update existing player data - important for color updates
 		GameManager.Players[id].name = player_name
@@ -177,17 +167,40 @@ func _on_manual_join_pressed():
 		print("Please enter a valid IP address")
 
 func JoinByIP(ip):
-	var my_id = multiplayer.get_unique_id()
+	# Create a safe ID even if multiplayer peer is null
+	var my_id
+	if multiplayer.multiplayer_peer:
+		my_id = multiplayer.get_unique_id()
+	else:
+		# Generate a temporary ID if no peer exists yet
+		my_id = randi_range(100000000, 999999999)
+	
 	# Store our player info locally
 	var player_name = player_name_edit.text
 	if player_name.strip_edges() == "": player_name = "Player"
-	GameManager.Players[my_id] = {"name": player_name, "id": my_id, "score": 0, "color": player_color}
-	# Connect
+	
+	# Initialize player in GameManager
+	GameManager.init_player_stats(my_id, player_name, player_color)
+	
+	# Save connection info for reconnection purposes
 	last_joined_ip = ip
 	GameManager.last_joined_ip = ip
+	
+	# Close any existing peer connection first
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+		multiplayer.set_multiplayer_peer(null)
+	
+	# Create a new peer for connection
 	peer = ENetMultiplayerPeer.new()
-	peer.create_client(ip, port)
+	var err = peer.create_client(ip, port)
+	if err != OK:
+		print("Error creating client: ", err)
+		return
+		
 	peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
+	
+	# Set the new peer
 	multiplayer.set_multiplayer_peer(peer)
 
 func get_joined_ip():

@@ -7,6 +7,18 @@ const JUMP_VELOCITY = 4.5
 @export var bullet_scene: PackedScene
 
 var health = 100
+# Use property setter/getter for player_color to ensure changes are applied immediately
+var _player_color = Color(0.2, 0.6, 1, 1) # Default color - internal variable
+var player_color: Color:
+	get:
+		return _player_color
+	set(value):
+		if _player_color == value: return # No change
+		_player_color = value
+		if is_inside_tree() and mesh != null:
+			set_player_color(value)
+			# print("Player color property updated to: ", value)
+
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var sync_position = Vector3.ZERO
 var sync_rotation = Vector3.ZERO
@@ -16,7 +28,7 @@ var sync_camera_rotation = Vector3.ZERO
 @onready var health_bar = $HealthBar3D/SubViewport/ProgressBar
 @onready var bullet_spawn = $CameraMount/BulletSpawn
 @onready var camera = $CameraMount/Camera3D
-
+@onready var mesh = $MeshInstance3D
 
 func _ready():
 	if not multiplayer.is_server():
@@ -29,8 +41,48 @@ func _ready():
 	if $MultiplayerSynchronizer.get_multiplayer_authority() == multiplayer.get_unique_id():
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		$CameraMount/Camera3D.current = true
+		
+		# Hide 3D health bar for the local player
+		$HealthBar3D.visible = false
+		
+		# Update UI health display
+		update_ui_health_display()
 	else:
 		$CameraMount/Camera3D.current = false
+	
+	# Set player color from GameManager 
+	var player_id = str(name).to_int()
+	# print("Player " + str(player_id) + " ready, checking color...")
+	if GameManager.Players.has(player_id):
+		# print("Player " + str(player_id) + " found in GameManager")
+		if GameManager.Players[player_id].has("color"):
+			# print("Player " + str(player_id) + " has color: ", GameManager.Players[player_id].color)
+			self.player_color = GameManager.Players[player_id].color # Use setter
+		# else:
+			# print("Player " + str(player_id) + " has no color in GameManager")
+	# else:
+		# print("Player " + str(player_id) + " not found in GameManager")
+		
+	# Force apply the color
+	set_player_color(_player_color)
+
+# Update the UI health display
+func update_ui_health_display():
+	# Only update UI for the local player
+	if $MultiplayerSynchronizer.get_multiplayer_authority() == multiplayer.get_unique_id():
+		var ui = get_tree().get_root().find_child("UI", true, false)
+		if ui and ui.has_method("update_health_display"):
+			ui.update_health_display(health, player_color)
+
+# Apply color to player mesh
+func set_player_color(color):
+	# print("Setting player " + name + " color to: ", color)
+	var material = StandardMaterial3D.new()
+	material.albedo_color = color
+	mesh.set_surface_override_material(0, material)
+	
+	# Also update the health bar tint
+	health_bar.modulate = color
 
 func _unhandled_input(event):
 	if $MultiplayerSynchronizer.get_multiplayer_authority() != multiplayer.get_unique_id():
@@ -129,6 +181,9 @@ func take_damage(amount: int):
 	health -= amount
 	health_bar.value = health
 	
+	# Update UI health display
+	update_ui_health_display()
+	
 	if health <= 0:
 		respawn.rpc()
 
@@ -136,6 +191,10 @@ func take_damage(amount: int):
 func respawn():
 	health = 100
 	health_bar.value = health
+	
+	# Update UI health display
+	update_ui_health_display()
+	
 	var scene_manager = get_parent()
 	if scene_manager.has_method("get_random_spawn_point"):
 		position = scene_manager.get_random_spawn_point()

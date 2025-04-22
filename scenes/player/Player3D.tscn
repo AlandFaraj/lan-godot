@@ -5,9 +5,6 @@
 
 [sub_resource type="BoxMesh" id="BoxMesh_q8p2x"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6y5xv"]
-albedo_color = Color(0.2, 0.6, 1, 1)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_w5dlc"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_j2p4x"]
@@ -32,6 +29,9 @@ properties/5/replication_mode = 1
 properties/6/path = NodePath(".:health")
 properties/6/spawn = true
 properties/6/replication_mode = 1
+properties/7/path = NodePath(".:player_color")
+properties/7/spawn = true
+properties/7/replication_mode = 1
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_2k4xv"]
 viewport_path = NodePath("HealthBar3D/SubViewport")
@@ -44,7 +44,6 @@ bullet_scene = ExtResource("2_r5m3p")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_q8p2x")
-surface_material_override/0 = SubResource("StandardMaterial3D_6y5xv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_w5dlc")

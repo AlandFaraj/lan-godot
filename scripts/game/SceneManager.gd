@@ -5,40 +5,32 @@ var used_spawn_points = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("Scene ready. Is server: ", multiplayer.is_server())
 	# Make sure the scene is visible for all clients
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	if multiplayer.is_server():
-		print("Server setting up connections")
 		multiplayer.peer_connected.connect(add_player)
 		multiplayer.peer_disconnected.connect(del_player)
 		
 		# Spawn already connected players
 		for id in multiplayer.get_peers():
-			print("Spawning existing peer: ", id)
 			add_player(id)
 			
 		# Spawn local player
-		print("Spawning server player")
 		add_player(1)
 		
 		# Update IP display for server
 		update_ip_display()
 	else:
-		print("Client setup starting")
 		# Client setup: make scene visible
 		get_tree().set_pause(false)
 		# Spawn existing players (server and other clients)
 		for id in multiplayer.get_peers():
-			print("Spawning existing peer: ", id)
 			spawn_player(id)
 		# Spawn local player
 		var my_id = multiplayer.get_unique_id()
-		print("Spawning local player: ", my_id)
 		spawn_player(my_id)
 		# Now request spawn from server for other clients
-		print("Client requesting spawn")
 		request_spawn.rpc_id(1)
 		
 		# Update IP display for client
@@ -79,31 +71,29 @@ func get_random_spawn_point() -> Vector3:
 
 # Called by server when a peer connects
 func add_player(id: int):
-	print("add_player called for id: ", id)
 	spawn_player.rpc(id)
 
 @rpc("any_peer")
 func request_spawn():
-	print("request_spawn received from: ", multiplayer.get_remote_sender_id())
 	if multiplayer.is_server():
 		var id = multiplayer.get_remote_sender_id()
-		print("Server handling spawn request for id: ", id)
 		spawn_player.rpc(id)
 
 @rpc("any_peer", "call_local")
 func spawn_player(id: int):
-	print("spawn_player called for id: ", id, " on peer: ", multiplayer.get_unique_id())
 	if has_node(str(id)):
-		print("Player ", id, " already exists, skipping spawn")
 		return
 		
-	print("Creating player instance for id: ", id)
 	var character = PlayerScene.instantiate()
 	character.name = str(id)
+	
+	# Apply player color immediately on spawn
+	if GameManager.Players.has(id) and GameManager.Players[id].has("color"):
+		character.player_color = GameManager.Players[id].color
+	
 	add_child(character, true)
 	character.global_position = get_random_spawn_point()
-	print("Player ", id, " spawned at position: ", character.global_position)
-	
+
 func del_player(id: int):
 	if not has_node(str(id)):
 		return

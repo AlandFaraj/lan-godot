@@ -5,6 +5,17 @@ const MENU_SCENE = "res://scenes/multiplayer/multiplayerMenuScene.tscn"
 @export var port = 8910
 var peer
 var last_joined_ip = ""
+var player_color = Color(0.2, 0.6, 1, 1) # Default player color
+
+# --- Node References (Updated for TabContainer structure) ---
+@onready var player_name_edit = $MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer/VBoxContainer/PlayerNameEdit
+@onready var selected_color_rect = $MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer/VBoxContainer/ColorPickerContainer/SelectedColorRect
+@onready var color_picker_button = $MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer/VBoxContainer/ColorPickerContainer/ColorPickerButton
+@onready var server_name_edit = $MainPanel/MarginContainer/VBoxContainer/TabContainer/Host/MarginContainer/VBoxContainer/ServerNameEdit
+@onready var manual_ip_edit = $MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ManualIPContainer/ManualIPEdit
+@onready var server_browser = $ServerBrowser
+# --------------------------------------------------------------
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -16,8 +27,11 @@ func _ready():
 	if "--server" in OS.get_cmdline_args():
 		hostGame()
 	
-	$ServerBrowser.joinGame.connect(JoinByIP)
-	pass # Replace with function body.
+	server_browser.joinGame.connect(JoinByIP)
+	
+	# Initialize UI elements
+	selected_color_rect.color = player_color
+	color_picker_button.color = player_color
 
 
 # this get called on the server and clients
@@ -36,41 +50,79 @@ func peer_disconnected(id):
 			i.queue_free()
 # called only from clients
 func connected_to_server():
-	print("connected To Sever!")
-	SendPlayerInformation.rpc_id(1, $MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer/LineEdit.text, multiplayer.get_unique_id())
+	var player_name = player_name_edit.text
+	if player_name.strip_edges() == "":
+		player_name = "Player"
+	# Locally store our own player info so spawn_player won't default to white
+	var my_id = multiplayer.get_unique_id()
+	GameManager.Players[my_id] = {
+		"name": player_name,
+		"id": my_id,
+		"score": 0,
+		"color": player_color
+	}
+	# Send our player info to the server (id 1)
+	SendPlayerInformation.rpc_id(1, player_name, my_id, player_color)
 
 # called only from clients
 func connection_failed():
 	print("Couldnt Connect")
 
 @rpc("any_peer")
-func SendPlayerInformation(player_name, id):
+func SendPlayerInformation(player_name, id, color):
 	if !GameManager.Players.has(id):
 		GameManager.Players[id] = {
 			"name": player_name,
 			"id": id,
-			"score": 0
+			"score": 0,
+			"color": color
 		}
+	else:
+		# Update existing player data - important for color updates
+		GameManager.Players[id].name = player_name
+		GameManager.Players[id].color = color
+	
+	# Update player color if the player already exists in the scene
+	update_existing_player_color(id, color)
 	
 	if multiplayer.is_server():
+		# Broadcast to all clients (including the origin) so they get their own colors
 		for i in GameManager.Players:
-			SendPlayerInformation.rpc(GameManager.Players[i].name, i)
+			SendPlayerInformation.rpc(GameManager.Players[i].name, i, GameManager.Players[i].color)
+
+# Update an existing player's color if they're already in the scene
+func update_existing_player_color(player_id, color):
+	var scene_tree = get_tree()
+	if scene_tree:
+		var root = scene_tree.root
+		for child in root.get_children():
+			# Look for game scene
+			if child.scene_file_path == "res://scenes/levels/testScene3D.tscn":
+				# Check if player with this ID exists
+				if child.has_node(str(player_id)):
+					var player = child.get_node(str(player_id))
+					if player.has_method("set_player_color"):
+						player.player_color = color
+						return true
+	return false
 
 @rpc("any_peer", "call_local")
 func StartGame():
-	print("StartGame called on peer: ", multiplayer.get_unique_id())
 	# Make sure we're not already in the game scene
 	for child in get_tree().root.get_children():
 		if child.scene_file_path == "res://scenes/levels/testScene3D.tscn":
-			print("Game scene already exists, skipping")
 			return
+	
+	# If we're the server, we should make sure all connected clients have the latest player info
+	if multiplayer.is_server():
+		# Ensure all players have the latest info before starting the game
+		for i in GameManager.Players:
+			SendPlayerInformation.rpc(GameManager.Players[i].name, i, GameManager.Players[i].color)
 			
-	print("Loading game scene")
 	# Load and setup the game scene
 	var scene = load("res://scenes/levels/testScene3D.tscn").instantiate()
 	
 	# Add to root but make sure it's properly setup for networking
-	print("Adding scene to tree")
 	get_tree().root.add_child(scene, true)
 	
 	# Hide the menu
@@ -81,9 +133,7 @@ func StartGame():
 	
 	# Set is_hosting_game true if this is the server - ONLY after the scene is ready
 	if multiplayer.is_server():
-		$ServerBrowser.is_hosting_game = true
-		
-	print("Game scene setup complete")
+		server_browser.is_hosting_game = true
 
 func hostGame():
 	peer = ENetMultiplayerPeer.new()
@@ -99,44 +149,40 @@ func hostGame():
 	
 func _on_host_button_down():
 	hostGame()
-	var player_name = $MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer/LineEdit.text
-	var server_name = $MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer/ServerNameEdit.text
+	var player_name = player_name_edit.text
+	var server_name = server_name_edit.text
 	if server_name.strip_edges() == "":
-		server_name = player_name + "'s server"
-	SendPlayerInformation(player_name, multiplayer.get_unique_id())
-	$ServerBrowser.setUpBroadCast(server_name)
+		server_name = player_name + "'s server" if player_name.strip_edges() != "" else "Unnamed Server"
+	SendPlayerInformation(player_name, multiplayer.get_unique_id(), player_color)
+	server_browser.setUpBroadCast(server_name)
 	
 	# Auto-start the game when hosting
 	print("Auto-starting game as host...")
 	StartGame.rpc()
 
-func _on_start_game_button_down():
-	StartGame.rpc()
-	pass # Replace with function body.
-
-
-func _on_button_button_down():
-	GameManager.Players[GameManager.Players.size() + 1] = {
-			"name": "test",
-			"id": 1,
-			"score": 0
-		}
-	pass # Replace with function body.
-
 func _on_quit_button_pressed():
 	# Set is_hosting_game false when quitting
-	$ServerBrowser.is_hosting_game = false
+	server_browser.is_hosting_game = false
 	get_tree().quit()
 
 func _on_manual_join_pressed():
-	var ip_text = $MainContainer/VBoxContainer/ServerList/ManualIPContainer/ManualIPEdit.text
+	var ip_text = manual_ip_edit.text
 	if ip_text.strip_edges() != "":
+		var player_name = player_name_edit.text
+		if player_name.strip_edges() == "":
+			player_name = "Player"
 		JoinByIP(ip_text)
 	else:
 		# Could add a visual feedback here like a popup
 		print("Please enter a valid IP address")
 
 func JoinByIP(ip):
+	var my_id = multiplayer.get_unique_id()
+	# Store our player info locally
+	var player_name = player_name_edit.text
+	if player_name.strip_edges() == "": player_name = "Player"
+	GameManager.Players[my_id] = {"name": player_name, "id": my_id, "score": 0, "color": player_color}
+	# Connect
 	last_joined_ip = ip
 	GameManager.last_joined_ip = ip
 	peer = ENetMultiplayerPeer.new()
@@ -157,3 +203,8 @@ func _on_server_disconnected():
 	get_viewport().warp_mouse(get_viewport().size / 2)
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	get_tree().change_scene_to_file(MENU_SCENE)
+
+# Updated function for the new ColorPickerButton
+func _on_color_picker_color_changed(color):
+	player_color = color
+	selected_color_rect.color = color

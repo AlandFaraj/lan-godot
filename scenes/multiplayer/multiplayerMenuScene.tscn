@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b6654q0g0v7u3"]
+[gd_scene load_steps=14 format=3 uid="uid://b6654q0g0v7u3"]
 
 [ext_resource type="Script" uid="uid://clm7vnpp6041d" path="res://scripts/networking/MultiplayerController.gd" id="1_gm76g"]
 [ext_resource type="Script" uid="uid://c6bit513kfmka" path="res://scripts/networking/ServerBrowser.gd" id="2_25j7p"]
@@ -10,67 +10,140 @@ particles_anim_h_frames = 3
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q832g"]
-bg_color = Color(0.109804, 0.117647, 0.141176, 0.901961)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mainpanel"]
+bg_color = Color(0.1, 0.1, 0.12, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.3, 0.35, 0.7)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 5
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_base"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.15, 0.15, 0.18, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.290196, 0.313726, 0.376471, 0.501961)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+border_color = Color(0.25, 0.25, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2u4e"]
-bg_color = Color(0.14902, 0.160784, 0.196078, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_selected"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.25, 0.45, 0.75, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.290196, 0.313726, 0.376471, 0.698039)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.4, 0.6, 0.9, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yk7f5"]
-bg_color = Color(0.227451, 0.466667, 0.823529, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_hover"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.2, 0.2, 0.25, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.407843, 0.611765, 0.92549, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.3, 0.3, 0.35, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_23n1e"]
-bg_color = Color(0.188235, 0.388235, 0.686275, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+bg_color = Color(0.12, 0.12, 0.15, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.364706, 0.545098, 0.835294, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.3, 0.3, 0.35, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+expand_margin_top = 8.0
+expand_margin_bottom = 8.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o7xgo"]
-bg_color = Color(0.14902, 0.160784, 0.196078, 0.8)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+bg_color = Color(0.25, 0.45, 0.75, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.290196, 0.313726, 0.376471, 0.698039)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.4, 0.6, 0.9, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
 
-[node name="Control" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_pressed"]
+bg_color = Color(0.18, 0.38, 0.65, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.55, 0.85, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_normal"]
+bg_color = Color(0.2, 0.2, 0.25, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.4, 0.45, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_disabled"]
+bg_color = Color(0.18, 0.18, 0.21, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.35, 0.4, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[node name="MultiplayerMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -87,40 +160,45 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.0627451, 0.0666667, 0.0823529, 1)
+color = Color(0.04, 0.04, 0.05, 1)
 
 [node name="BackgroundParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_j31a7")
 position = Vector2(576, 324)
-amount = 30
-lifetime = 15.0
-preprocess = 15.0
-speed_scale = 0.5
+amount = 25
+lifetime = 20.0
+preprocess = 20.0
+speed_scale = 0.4
 emission_shape = 3
-emission_rect_extents = Vector2(600, 350)
+emission_rect_extents = Vector2(700, 400)
 direction = Vector2(0, -1)
-spread = 20.0
-gravity = Vector2(0, -5)
-initial_velocity_min = 2.0
-initial_velocity_max = 8.0
-angular_velocity_min = -10.0
-angular_velocity_max = 10.0
-scale_amount_min = 0.5
-scale_amount_max = 1.5
-color = Color(0.227451, 0.466667, 0.823529, 0.0784314)
-anim_speed_min = 1.0
-anim_speed_max = 1.0
+spread = 25.0
+gravity = Vector2(0, -4)
+initial_velocity_min = 1.5
+initial_velocity_max = 6.0
+angular_velocity_min = -8.0
+angular_velocity_max = 8.0
+scale_amount_min = 0.6
+scale_amount_max = 1.8
+color = Color(0.25, 0.45, 0.75, 0.06)
+anim_speed_min = 0.8
+anim_speed_max = 1.2
 
 [node name="MainPanel" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.15
-anchor_top = 0.15
-anchor_right = 0.85
-anchor_bottom = 0.85
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -550.0
+offset_top = -380.0
+offset_right = 550.0
+offset_bottom = 380.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_q832g")
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_mainpanel")
 
 [node name="MarginContainer" type="MarginContainer" parent="MainPanel"]
 layout_mode = 2
@@ -131,165 +209,278 @@ theme_override_constants/margin_bottom = 25
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 20
 
-[node name="PlayerSetupContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="MainPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "MULTIPLAYER SETUP"
+horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer"]
+[node name="TabContainer" type="TabContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_unselected_color = Color(0.7, 0.7, 0.75, 1)
+theme_override_colors/font_hovered_color = Color(0.9, 0.9, 1, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_constants/side_margin = 15
+theme_override_font_sizes/font_size = 22
+theme_override_styles/panel = SubResource("StyleBoxFlat_tab_base")
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_tab_selected")
+theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_tab_hover")
+theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_tab_base")
+tab_alignment = 1
+current_tab = 0
+
+[node name="Profile" type="PanelContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tab_base")
+metadata/_tab_index = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="PlayerNameLabel" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
 text = "Player Name"
 
-[node name="LineEdit" type="LineEdit" parent="MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer"]
-custom_minimum_size = Vector2(0, 60)
+[node name="PlayerNameEdit" type="LineEdit" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
-theme_override_colors/caret_color = Color(0.227451, 0.466667, 0.823529, 1)
-theme_override_colors/font_placeholder_color = Color(0.6, 0.611765, 0.65098, 0.6)
-theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
+theme_override_colors/caret_color = Color(0.25, 0.45, 0.75, 1)
+theme_override_colors/font_placeholder_color = Color(0.5, 0.5, 0.55, 0.7)
+theme_override_colors/font_color = Color(0.95, 0.95, 0.97, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
 placeholder_text = "Enter your name"
 
-[node name="ServerNameLabel" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer"]
+[node name="ColorLabel" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Server Name"
+theme_override_font_sizes/font_size = 24
+text = "Player Color"
 
-[node name="ServerNameEdit" type="LineEdit" parent="MainPanel/MarginContainer/VBoxContainer/PlayerSetupContainer"]
-custom_minimum_size = Vector2(0, 60)
+[node name="ColorPickerContainer" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_colors/caret_color = Color(0.227451, 0.466667, 0.823529, 1)
-theme_override_colors/font_placeholder_color = Color(0.6, 0.611765, 0.65098, 0.6)
-theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
-placeholder_text = "Enter server name"
+theme_override_constants/separation = 20
 
-[node name="ButtonContainer" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
+[node name="SelectedColorRect" type="ColorRect" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer/VBoxContainer/ColorPickerContainer"]
+custom_minimum_size = Vector2(100, 70)
+layout_mode = 2
+color = Color(0.2, 0.6, 1, 1)
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer/VBoxContainer/ColorPickerContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 24
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+text = "Choose Color"
+color = Color(0.2, 0.6, 1, 1)
+edit_alpha = false
+
+[node name="Host" type="PanelContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tab_base")
+metadata/_tab_index = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Host"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Host/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="ServerNameLabel" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Host/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Server Name (Optional)"
+
+[node name="ServerNameEdit" type="LineEdit" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Host/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_colors/caret_color = Color(0.25, 0.45, 0.75, 1)
+theme_override_colors/font_placeholder_color = Color(0.5, 0.5, 0.55, 0.7)
+theme_override_colors/font_color = Color(0.95, 0.95, 0.97, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+placeholder_text = "Leave blank for default"
+
+[node name="Spacer" type="Control" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Host/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HostButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Host/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/disabled = SubResource("StyleBoxFlat_button_disabled")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+text = "HOST & START"
+
+[node name="Join" type="PanelContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tab_base")
+metadata/_tab_index = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Available Servers"
+
+[node name="ServerListHeader" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Name" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ServerListHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "SERVER NAME"
+
+[node name="Ip" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ServerListHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "IP ADDRESS"
+
+[node name="PlayerCount" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ServerListHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.35
+theme_override_colors/font_color = Color(0.7, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "PLAYERS"
+horizontal_alignment = 1
+
+[node name="Action" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ServerListHeader"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "ACTION"
+horizontal_alignment = 2
+
+[node name="ServerListScroll" type="ScrollContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="ServerContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ServerListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RefreshButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/disabled = SubResource("StyleBoxFlat_button_disabled")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+text = "Refresh List"
+
+[node name="HSeparator" type="HSeparator" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0.4)
+layout_mode = 2
+
+[node name="ManualIPContainer" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 15
 alignment = 1
 
-[node name="Host" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
-theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
-text = "HOST & START"
-
-[node name="QuitButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ButtonContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
-theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
-text = "QUIT"
-
-[node name="HSeparator2" type="HSeparator" parent="MainPanel/MarginContainer/VBoxContainer"]
-modulate = Color(1, 1, 1, 0.3)
-layout_mode = 2
-
-[node name="ServerListContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "Available Servers"
-horizontal_alignment = 1
-
-[node name="ServerListHeader" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer"]
-layout_mode = 2
-
-[node name="Name" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListHeader"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 1)
-text = "SERVER NAME"
-
-[node name="Ip" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListHeader"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 1)
-text = "IP ADDRESS"
-
-[node name="PlayerCount" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListHeader"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.35
-theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 1)
-text = "PLAYERS"
-
-[node name="Action" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListHeader"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 1)
-text = "ACTION"
-
-[node name="ServerListScroll" type="ScrollContainer" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="ServerContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListScroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="RefreshButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ServerListContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-focus_mode = 0
-theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
-theme_override_font_sizes/font_size = 14
-theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
-theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
-text = "Refresh List"
-
-[node name="HSeparator3" type="HSeparator" parent="MainPanel/MarginContainer/VBoxContainer"]
-modulate = Color(1, 1, 1, 0.3)
-layout_mode = 2
-
-[node name="ManualIPContainer" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/ManualIPContainer"]
+[node name="Label" type="Label" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ManualIPContainer"]
 layout_mode = 2
 size_flags_vertical = 1
+theme_override_font_sizes/font_size = 22
 text = "Manual IP:"
 vertical_alignment = 1
 
-[node name="ManualIPEdit" type="LineEdit" parent="MainPanel/MarginContainer/VBoxContainer/ManualIPContainer"]
+[node name="ManualIPEdit" type="LineEdit" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ManualIPContainer"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/caret_color = Color(0.227451, 0.466667, 0.823529, 1)
-theme_override_colors/font_placeholder_color = Color(0.6, 0.611765, 0.65098, 0.6)
-theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_o7xgo")
+theme_override_colors/caret_color = Color(0.25, 0.45, 0.75, 1)
+theme_override_colors/font_placeholder_color = Color(0.5, 0.5, 0.55, 0.7)
+theme_override_colors/font_color = Color(0.95, 0.95, 0.97, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
 placeholder_text = "Enter IP address"
 flat = true
 
-[node name="JoinManualButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/ManualIPContainer"]
+[node name="JoinManualButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ManualIPContainer"]
+custom_minimum_size = Vector2(160, 60)
 layout_mode = 2
 focus_mode = 0
-theme_override_colors/font_color = Color(0.941176, 0.945098, 0.960784, 1)
-theme_override_font_sizes/font_size = 14
-theme_override_styles/hover = SubResource("StyleBoxFlat_yk7f5")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_23n1e")
-theme_override_styles/normal = SubResource("StyleBoxFlat_n2u4e")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/disabled = SubResource("StyleBoxFlat_button_disabled")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
 text = "CONNECT"
 
+[node name="BottomButtonsContainer" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="QuitButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/BottomButtonsContainer"]
+custom_minimum_size = Vector2(180, 70)
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/disabled = SubResource("StyleBoxFlat_button_disabled")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+text = "QUIT"
+
 [node name="ServerBrowser" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -302,17 +493,6 @@ serverInfo = ExtResource("3_y5564")
 
 [node name="BroadcastTimer" type="Timer" parent="ServerBrowser"]
 
-[node name="Label2" type="Label" parent="ServerBrowser"]
-visible = false
-layout_mode = 0
-offset_left = 901.0
-offset_top = 15.0
-offset_right = 1148.0
-offset_bottom = 67.0
-mouse_filter = 1
-text = "Bound To 
-Listen Port: "
-
 [node name="VersionInfo" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 3
@@ -320,20 +500,22 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = -23.0
-offset_right = -10.0
+offset_left = -80.0
+offset_top = -35.0
+offset_right = -15.0
+offset_bottom = -10.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 1
-theme_override_colors/font_color = Color(0.6, 0.611765, 0.65098, 0.501961)
-theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.6, 0.6, 0.65, 0.6)
+theme_override_font_sizes/font_size = 16
 text = "v1.0.0"
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ButtonContainer/Host" to="." method="_on_host_button_down"]
-[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ButtonContainer/QuitButton" to="." method="_on_quit_button_pressed"]
-[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ServerListContainer/RefreshButton" to="ServerBrowser" method="refresh_servers"]
-[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/ManualIPContainer/JoinManualButton" to="." method="_on_manual_join_pressed"]
+[connection signal="color_changed" from="MainPanel/MarginContainer/VBoxContainer/TabContainer/Profile/MarginContainer/VBoxContainer/ColorPickerContainer/ColorPickerButton" to="." method="_on_color_picker_color_changed"]
+[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/TabContainer/Host/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_down"]
+[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/RefreshButton" to="ServerBrowser" method="refresh_servers"]
+[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ManualIPContainer/JoinManualButton" to="." method="_on_manual_join_pressed"]
+[connection signal="pressed" from="MainPanel/MarginContainer/VBoxContainer/BottomButtonsContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="timeout" from="ServerBrowser/BroadcastTimer" to="ServerBrowser" method="_on_broadcast_timer_timeout"]

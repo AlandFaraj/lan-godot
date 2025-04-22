@@ -24,7 +24,7 @@ var is_hosting_game = false
 @export var serverInfo: PackedScene
 
 # Path to the container where server entries are added
-var server_list_container_path = "/root/Control/MainPanel/MarginContainer/VBoxContainer/ServerListContainer/ServerListScroll/ServerContainer"
+var server_list_container_path = "/root/MultiplayerMenu/MainPanel/MarginContainer/VBoxContainer/TabContainer/Join/MarginContainer/VBoxContainer/ServerListScroll/ServerContainer"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
